@@ -17,6 +17,7 @@
     "animate.css": "4.1.1",
     "awesome-bootstrap-checkbox": "1.0.1",
     "bootstrap": "4.6.0",
+    "classnames": "^2.3.1",
     "connected-react-router": "^6.9.1",
     "font-awesome": "4.7.0",
     "glyphicons-halflings": "^1.9.1",
@@ -68,7 +69,7 @@
   "devDependencies": {
     "file-loader": "^3.0.1",
     "node-sass": "4.14.1",
-    "sass-loader": "7.3.1",
-    "url-loader": "1.1.2"
+    "resolve-url-loader": "^3.1.4",
+    "sass-loader": "7.3.1"
   }
 }

@@ -1,12 +1,12 @@
 import React from "react";
-import { Switch, Route, Redirect, withRouter } from "react-router";
+import { Switch, Route, withRouter } from "react-router";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 import { connect } from "react-redux";
 //import Hammer from "hammerjs";
 
 import Header from "../Header";
-//import Sidebar from '../Sidebar';
+import Sidebar from "../Sidebar";
 
 import s from "./Layout.module.scss";
 
@@ -47,7 +47,7 @@ function Layout(props: any) {
     >
       <div className={s.wrap}>
         <Header />
-        {/*<Sidebar />*/}
+        <Sidebar />
         {/*<Hammer onSwipe={handleSwipe}>*/}
         <main className={s.content}>
           <TransitionGroup>

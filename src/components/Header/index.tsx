@@ -50,28 +50,8 @@ function Header(props: any) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
 
-  function toggleNotifications() {
-    setNotificationsOpen(!notificationsOpen);
-  }
-
   function doLogout() {
     console.log("logout");
-  }
-
-  function toggleMessagesDropdown() {
-    setMessageOpen(!messagesOpen);
-  }
-
-  function toggleSupportDropdown() {
-    setSupportOpen(!supportOpen);
-  }
-
-  function toggleSettingsDropdown() {
-    setSettingsOpen(!settingsOpen);
-  }
-
-  function toggleSearchOpen() {
-    setSearchOpen(!searchOpen);
   }
 
   function toggleSidebar() {
@@ -80,13 +60,6 @@ function Header(props: any) {
       : props.dispatch(openSidebar());
   }
 
-  function moveSidebar(position: any) {
-    props.dispatch(changeSidebarPosition(position));
-  }
-
-  function toggleVisibilitySidebar(visibility: any) {
-    props.dispatch(changeSidebarVisibility(visibility));
-  }
   const user = {
     nft: false,
     name: "User",
@@ -116,7 +89,10 @@ function Header(props: any) {
           className={`${s.alert} mr-3 d-lg-down-none animate__animated animate__bounceIn animate__delay-1s`}
         >
           Check out settings
-          <button className="btn-link" onClick={toggleSettingsDropdown}>
+          <button
+            className="btn-link"
+            onClick={() => setSettingsOpen(!settingsOpen)}
+          >
             <SettingsIcon className={s.settingsIcon} />
           </button>{" "}
           on the right!
@@ -165,7 +141,7 @@ function Header(props: any) {
           <Dropdown
             nav
             isOpen={notificationsOpen}
-            toggle={toggleNotifications}
+            toggle={() => setNotificationsOpen(!notificationsOpen)}
             id="basic-nav-dropdown"
             className={`${s.notificationsMenu}`}
           >
@@ -202,11 +178,19 @@ function Header(props: any) {
             </DropdownMenu>
           </Dropdown>
           <NavItem className="d-lg-none">
-            <NavLink onClick={toggleSearchOpen} className={s.navItem} href="#">
+            <NavLink
+              onClick={() => setSearchOpen(!searchOpen)}
+              className={s.navItem}
+              href="#"
+            >
               <SearchIcon addId="header-search" className={s.headerIcon} />
             </NavLink>
           </NavItem>
-          <Dropdown nav isOpen={messagesOpen} toggle={toggleMessagesDropdown}>
+          <Dropdown
+            nav
+            isOpen={messagesOpen}
+            toggle={() => setMessageOpen(!messagesOpen)}
+          >
             <DropdownToggle
               nav
               className={`d-sm-down-none ${s.navItem} text-white`}
@@ -238,7 +222,7 @@ function Header(props: any) {
             className="d-none d-sm-block"
             nav
             isOpen={settingsOpen}
-            toggle={toggleSettingsDropdown}
+            toggle={() => setSettingsOpen(!settingsOpen)}
           >
             <DropdownToggle nav className={`${s.navItem} text-white`}>
               <SettingsIcon addId="header-settings" className={s.headerIcon} />
@@ -248,14 +232,14 @@ function Header(props: any) {
               <ButtonGroup size="sm">
                 <Button
                   color="primary"
-                  onClick={() => moveSidebar("left")}
+                  onClick={() => props.dispatch(changeSidebarPosition("left"))}
                   className={props.sidebarPosition === "left" ? "active" : ""}
                 >
                   Left
                 </Button>
                 <Button
                   color="primary"
-                  onClick={() => moveSidebar("right")}
+                  onClick={() => props.dispatch(changeSidebarPosition("right"))}
                   className={props.sidebarPosition === "right" ? "active" : ""}
                 >
                   Right
@@ -265,14 +249,18 @@ function Header(props: any) {
               <ButtonGroup size="sm">
                 <Button
                   color="primary"
-                  onClick={() => toggleVisibilitySidebar("show")}
+                  onClick={() =>
+                    props.dispatch(changeSidebarVisibility("show"))
+                  }
                   className={props.sidebarVisibility === "show" ? "active" : ""}
                 >
                   Show
                 </Button>
                 <Button
                   color="primary"
-                  onClick={() => toggleVisibilitySidebar("hide")}
+                  onClick={() =>
+                    props.dispatch(changeSidebarVisibility("hide"))
+                  }
                   className={props.sidebarVisibility === "hide" ? "active" : ""}
                 >
                   Hide
@@ -284,7 +272,7 @@ function Header(props: any) {
             className="d-none d-sm-block"
             nav
             isOpen={supportOpen}
-            toggle={toggleSupportDropdown}
+            toggle={() => setSupportOpen(!supportOpen)}
           >
             <DropdownToggle nav className={`${s.navItem} text-white`}>
               <BellIcon className={s.headerIcon} />
