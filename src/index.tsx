@@ -1,15 +1,34 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
+import ReduxThunk from "redux-thunk";
+import { Provider } from "react-redux";
+
+import { routerMiddleware } from "connected-react-router";
+import { createStore, applyMiddleware, compose } from "redux";
+import { createHashHistory } from "history";
+
+import createRootReducer from "./reducers";
 
 import * as serviceWorker from "./serviceWorker";
 
 import "./index.css";
 
+const history = createHashHistory();
+
+export function getHistory() {
+  return history;
+}
+
+export const store = createStore(
+  createRootReducer(history),
+  compose(applyMiddleware(routerMiddleware(history), ReduxThunk))
+);
+
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <App />
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById("root")
 );
 
