@@ -52,7 +52,7 @@ function Sidebar(props: any) {
           header="Home"
           isHeader
           iconName={<DashboardIcon className={s.menuIcon} />}
-          link="/"
+          link="/home"
           exact={true}
           label="new"
           labelColor="success"

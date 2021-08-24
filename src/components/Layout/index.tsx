@@ -11,7 +11,6 @@ import Sidebar from "../Sidebar";
 import s from "./Layout.module.scss";
 
 //import { openSidebar, closeSidebar } from "../../actions/navigation";
-
 import Home from "../../views/home";
 
 function Layout(props: any) {
@@ -58,7 +57,6 @@ function Layout(props: any) {
             >
               <Switch>
                 <Route path="/home" exact component={Home} />
-                {/*<Route path="/" exact render={() => <Redirect to="/home" />} />*/}
               </Switch>
             </CSSTransition>
           </TransitionGroup>

@@ -21,7 +21,7 @@
     "connected-react-router": "^6.9.1",
     "font-awesome": "4.7.0",
     "glyphicons-halflings": "^1.9.1",
-    "history": "^5.0.1",
+    "history": "4.10.1",
     "line-awesome": "^1.3.0",
     "messenger": "git+https://github.com/HubSpot/messenger.git#v1.4.2",
     "nvd3": "1.8.6",

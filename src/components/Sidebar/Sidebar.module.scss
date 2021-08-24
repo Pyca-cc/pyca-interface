@@ -28,7 +28,7 @@
   :global(.sidebar-hide) & {
     display: none;
   }
-  
+
   @include scroll-bar($sidebar-scrollbar-bg);
 
 
@@ -91,7 +91,7 @@
     width: 32px;
     height: 32px;
     //
-  } 
+  }
 }
 
 .navTitle {
@@ -159,8 +159,8 @@
     text-decoration: none;
 
     > i {
-      font-size: 6px;
-      vertical-align: 2px;
+      font-size: 16px;
+      vertical-align: 0px;
       transition: margin-left $sidebar-transition-time ease-in-out;
     }
   }
@@ -205,7 +205,7 @@
   margin-right: 2px;
   padding: 0.5rem 11px 0.5rem 10px !important;
   padding-right: 15px;
-  
+
   button > span {
     color: $icon-color;
     font-weight: $font-weight-normal;
@@ -213,7 +213,7 @@
 
   .alertFooter {
     color: #A5A7B850;
-  }  
+  }
 }
 
 .groupTitle {
@@ -223,4 +223,3 @@
 .menuIcon {
   fill: $icon-color;
 }
-
