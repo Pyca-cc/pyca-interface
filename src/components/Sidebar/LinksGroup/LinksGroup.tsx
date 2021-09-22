@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Collapse, Badge } from "reactstrap";
 import { Route } from "react-router";
-import { NavLink, withRouter } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 import classnames from "classnames";
 
@@ -157,4 +157,4 @@ function LinksGroup(props: any) {
   );
 }
 
-export default withRouter(LinksGroup);
+export default LinksGroup;

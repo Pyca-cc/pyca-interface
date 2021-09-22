@@ -223,3 +223,12 @@
 .menuIcon {
   fill: $icon-color;
 }
+
+.btnNotificationsReload {
+  color: #2477ff;
+  outline: none;
+
+  i::before {
+    top: 2px;
+  }
+}

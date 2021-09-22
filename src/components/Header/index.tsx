@@ -4,21 +4,14 @@ import {
   Nav,
   NavItem,
   NavLink,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroup,
-  Input,
   UncontrolledAlert,
   Dropdown,
-  Collapse,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
   Badge,
   ButtonGroup,
   Button,
-  Form,
-  FormGroup,
 } from "reactstrap";
 
 import PowerIcon from "../Icons/HeaderIcons/PowerIcon";
@@ -26,38 +19,50 @@ import BellIcon from "../Icons/HeaderIcons/BellIcon";
 import SettingsIcon from "../Icons/HeaderIcons/SettingsIcon";
 import MessageIcon from "../Icons/HeaderIcons/MessageIcon";
 import BurgerIcon from "../Icons/HeaderIcons/BurgerIcon";
-import SearchIcon from "../Icons/HeaderIcons/SearchIcon";
 import ArrowIcon from "../Icons/HeaderIcons/ArrowIcon";
 import Notifications from "../Notifications";
 
-import {
-  openSidebar,
-  closeSidebar,
-  changeSidebarPosition,
-  changeSidebarVisibility,
-} from "../../actions/navigation";
-
-import { connect } from "react-redux";
-import { withRouter } from "react-router";
-
 import s from "./Header.module.scss";
+
+import { useUserConfig } from "../../contexts/user";
 
 function Header(props: any) {
   const [messagesOpen, setMessageOpen] = useState(false);
   const [supportOpen, setSupportOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [searchFocused, setSearchFocused] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+
+  const {
+    sidebarPosition,
+    setSidebarPosition,
+    sidebarVisibility,
+    setSidebarVisibility,
+    sidebarOpened,
+    setSidebarOpened,
+  } = useUserConfig();
 
   function doLogout() {
     console.log("logout");
   }
 
   function toggleSidebar() {
-    props.isSidebarOpened
-      ? props.dispatch(closeSidebar())
-      : props.dispatch(openSidebar());
+    sidebarOpened ? closeSidebar() : openSidebar();
+  }
+
+  function closeSidebar() {
+    setSidebarOpened(false);
+  }
+
+  function openSidebar() {
+    setSidebarOpened(true);
+  }
+
+  function changeSidebarPosition(position: string) {
+    setSidebarPosition(position);
+  }
+
+  function changeSidebarVisibility(visibility: string) {
+    setSidebarVisibility(visibility);
   }
 
   const user = {
@@ -97,46 +102,6 @@ function Header(props: any) {
           </button>{" "}
           on the right!
         </UncontrolledAlert>
-        <Collapse
-          className={`${s.searchCollapse} ml-lg-0 mr-md-3`}
-          isOpen={searchOpen}
-        >
-          <InputGroup
-            className={`${s.navbarForm} ${
-              searchFocused ? s.navbarFormFocused : ""
-            }`}
-          >
-            <InputGroupAddon addonType="prepend" className={s.inputAddon}>
-              <InputGroupText>
-                <i className="fa fa-search" />
-              </InputGroupText>
-            </InputGroupAddon>
-            <Input
-              id="search-input-2"
-              placeholder="Search..."
-              className="input-transparent"
-              onFocus={() => setSearchFocused(true)}
-              onBlur={() => setSearchFocused(false)}
-            />
-          </InputGroup>
-        </Collapse>
-        <Form className="d-md-down-none mr-3 ml-3" inline>
-          <FormGroup>
-            <InputGroup className={`input-group-no-border ${s.searchForm}`}>
-              <InputGroupAddon addonType="prepend">
-                <InputGroupText className={s.inputGroupText}>
-                  <SearchIcon className={s.headerIcon} />
-                </InputGroupText>
-              </InputGroupAddon>
-              <Input
-                id="search-input"
-                className="input-transparent"
-                placeholder="Search Dashboard"
-              />
-            </InputGroup>
-          </FormGroup>
-        </Form>
-
         <Nav className="ml-md-0">
           <Dropdown
             nav
@@ -177,15 +142,7 @@ function Header(props: any) {
               <Notifications />
             </DropdownMenu>
           </Dropdown>
-          <NavItem className="d-lg-none">
-            <NavLink
-              onClick={() => setSearchOpen(!searchOpen)}
-              className={s.navItem}
-              href="#"
-            >
-              <SearchIcon addId="header-search" className={s.headerIcon} />
-            </NavLink>
-          </NavItem>
+
           <Dropdown
             nav
             isOpen={messagesOpen}
@@ -206,8 +163,7 @@ function Header(props: any) {
                 </div>
               </DropdownItem>
               <DropdownItem>
-                {/* eslint-disable-next-line */}
-                <a href="#" className="text-white">
+                <a href="/home" className="text-white">
                   See all transactions{" "}
                   <ArrowIcon
                     className={s.headerIcon}
@@ -232,15 +188,15 @@ function Header(props: any) {
               <ButtonGroup size="sm">
                 <Button
                   color="primary"
-                  onClick={() => props.dispatch(changeSidebarPosition("left"))}
-                  className={props.sidebarPosition === "left" ? "active" : ""}
+                  onClick={() => changeSidebarPosition("left")}
+                  className={sidebarPosition === "left" ? "active" : ""}
                 >
                   Left
                 </Button>
                 <Button
                   color="primary"
-                  onClick={() => props.dispatch(changeSidebarPosition("right"))}
-                  className={props.sidebarPosition === "right" ? "active" : ""}
+                  onClick={() => changeSidebarPosition("right")}
+                  className={sidebarPosition === "right" ? "active" : ""}
                 >
                   Right
                 </Button>
@@ -249,19 +205,15 @@ function Header(props: any) {
               <ButtonGroup size="sm">
                 <Button
                   color="primary"
-                  onClick={() =>
-                    props.dispatch(changeSidebarVisibility("show"))
-                  }
-                  className={props.sidebarVisibility === "show" ? "active" : ""}
+                  onClick={() => changeSidebarVisibility("show")}
+                  className={sidebarVisibility === "show" ? "active" : ""}
                 >
                   Show
                 </Button>
                 <Button
                   color="primary"
-                  onClick={() =>
-                    props.dispatch(changeSidebarVisibility("hide"))
-                  }
-                  className={props.sidebarVisibility === "hide" ? "active" : ""}
+                  onClick={() => changeSidebarVisibility("hide")}
+                  className={sidebarVisibility === "hide" ? "active" : ""}
                 >
                   Hide
                 </Button>
@@ -288,8 +240,7 @@ function Header(props: any) {
                 </div>
               </DropdownItem>
               <DropdownItem>
-                {/* eslint-disable-next-line */}
-                <a href="#" className="text-white">
+                <a href="/home" className="text-white">
                   See all tickets{" "}
                   <ArrowIcon className={s.headerIcon} maskName="bellArrow" />
                 </a>
@@ -311,12 +262,4 @@ function Header(props: any) {
   );
 }
 
-function mapStateToProps(store: any) {
-  return {
-    isSidebarOpened: store.navigation.sidebarOpened,
-    sidebarVisibility: store.navigation.sidebarVisibility,
-    sidebarPosition: store.navigation.sidebarPosition,
-  };
-}
-
-export default withRouter(connect(mapStateToProps)(Header));
+export default Header;

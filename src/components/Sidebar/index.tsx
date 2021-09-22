@@ -1,41 +1,60 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Progress, Alert } from "reactstrap";
 
 import DashboardIcon from "../Icons/SidebarIcons/DashboardIcon";
-/*
-import UserIcon from "../Icons/SidebarIcons/UserIcon";
-import EcommerceIcon from "../Icons/SidebarIcons/EcommerceIcon";
-import LBPackageIcon from "../Icons/SidebarIcons/LBPackageIcon";
-import EmailIcon from "../Icons/SidebarIcons/EmailIcon";
-import DocumentationIcon from "../Icons/SidebarIcons/DocumentationIcon";
-import CoreIcon from "../Icons/SidebarIcons/CoreIcon";
-import UIElementsIcon from "../Icons/SidebarIcons/UIElementsIcon";
-import GridIcon from "../Icons/SidebarIcons/GridIcon";
-import FormsIcon from "../Icons/SidebarIcons/FormsIcon";
-import ChartsIcon from "../Icons/SidebarIcons/ChartsIcon";
-import TablesIcon from "../Icons/SidebarIcons/TablesIcon";
-import MapsIcon from "../Icons/SidebarIcons/MapsIcon";
-import ExtraIcon from "../Icons/SidebarIcons/ExtraIcon";
-import MenuIcon from "../Icons/SidebarIcons/MenuIcon";
-*/
+
 import LinksGroup from "./LinksGroup/LinksGroup";
 
-import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { Button } from "reactstrap";
 
-import { dismissAlert } from "../../actions/alerts";
-import { changeActiveSidebarItem } from "../../actions/navigation";
+import { useUserConfig } from "../../contexts/user";
 
 import s from "./Sidebar.module.scss";
 import cx from "classnames";
+let element: any;
 
 function Sidebar(props: any) {
+  const [alertsList, setAlertsList] = useState<any[]>([]);
+  const [isLoad, setIsLoad] = useState(false);
+  const { sidebarOpened } = useUserConfig();
+
+  useEffect(() => {
+    getAlerts();
+  }, []);
+
+  function getAlerts() {
+    setIsLoad(true);
+    setAlertsList([]);
+    setTimeout(() => {
+      fetch("https://raw.githubusercontent.com/Pyca-cc/alerts/main/alerts.json")
+        .then((response) => response.json())
+        .then((data) => setAlertsList(data));
+      setIsLoad(false);
+    }, 1500);
+  }
+
+  function changeActiveSidebarItem(activeItem: any) {}
+
+  useEffect(() => {
+    if (element) {
+      if (sidebarOpened) {
+        element.style.height = `${element.scrollHeight}px`;
+        element.classList.add(s.sidebarOpen);
+      } else {
+        element.classList.remove(s.sidebarOpen);
+        setTimeout(() => {
+          element.style.height = "";
+        }, 0);
+      }
+    }
+  }, [sidebarOpened]);
+
   return (
     <nav
       className={cx(s.root)}
-      /*ref={(nav) => {
-        document.element = nav;
-      }}*/
+      ref={(nav) => {
+        element = nav;
+      }}
     >
       <header className={s.logo}>
         <a href="https://pyca.cc">
@@ -46,7 +65,7 @@ function Sidebar(props: any) {
         <h5 className={[s.navTitle, s.groupTitle].join(" ")}>APP</h5>
         <LinksGroup
           onActiveSidebarItemChange={(activeItem: any) =>
-            props.dispatch(changeActiveSidebarItem(activeItem))
+            changeActiveSidebarItem(activeItem)
           }
           activeItem={props.activeItem}
           header="Home"
@@ -61,43 +80,60 @@ function Sidebar(props: any) {
       </ul>
       <h5 className={[s.navTitle, s.groupTitle].join(" ")}>
         SOCIAL
-        {/* eslint-disable-next-line */}
       </h5>
-      {/* eslint-disable */}
       <ul className={s.sidebarLabels}>
         <li>
-          <a href="https://twitter.com/pyca_cc" target="_blank">
+          <a href="https://twitter.com/pyca_cc" target="_blank" rel="noreferrer">
             <i className="fa fa-twitter" />
             <span className={s.labelName}>Twitter</span>
           </a>
         </li>
         <li>
-          <a href="#" target="_blank">
+          <a href="https://t.me/pycacc" target="_blank" rel="noreferrer">
             <i className="fa fa-medium" />
             <span className={s.labelName}>Medium</span>
           </a>
         </li>
         <li>
-          <a href="https://t.me/pycacc" target="_blank">
+          <a href="https://t.me/pycacc" target="_blank" rel="noreferrer">
             <i className="fa fa-telegram" />
             <span className={s.labelName}>Telegram</span>
           </a>
         </li>
       </ul>
-      {/* eslint-enable */}
-      <h5 className={[s.navTitle, s.groupTitle].join(" ")}>PROJECTS</h5>
+      <h5 className={[s.navTitle, s.groupTitle].join(" ")}>
+        ALERTS
+        <Button
+          color="link"
+          className={cx(
+            { disabled: isLoad },
+            s.btnNotificationsReload,
+            "btn-xs"
+          )}
+          onClick={() => getAlerts()}
+        >
+          {isLoad ? (
+            <span>
+              <i className="la la-refresh la-spin" /> Loading...
+            </span>
+          ) : (
+            <i className="la la-refresh" />
+          )}
+        </Button>
+      </h5>
+
       <div className={s.sidebarAlerts}>
-        {props.alertsList.map((
-          alert: any // eslint-disable-line
+        {alertsList.map((
+          alert: any
         ) => (
           <Alert
             key={alert.id}
             className={s.sidebarAlert}
             color="transparent"
-            isOpen={true} // eslint-disable-line
-            toggle={() => {
-              props.dispatch(dismissAlert(alert.id));
-            }}
+            isOpen={true}
+            /*toggle={() => {
+              getAlerts();
+            }}*/
           >
             <span>{alert.title}</span>
             <br />
@@ -114,13 +150,4 @@ function Sidebar(props: any) {
   );
 }
 
-function mapStateToProps(store: any) {
-  return {
-    sidebarOpened: store.navigation.sidebarOpened,
-    sidebarStatic: store.navigation.sidebarStatic,
-    alertsList: store.alerts.alertsList,
-    activeItem: store.navigation.activeItem,
-  };
-}
-
-export default withRouter(connect(mapStateToProps)(Sidebar));
+export default Sidebar;
